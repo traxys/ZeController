@@ -25,11 +25,10 @@ class ZeController extends StatelessWidget {
             }).toList()),
           ),
           body: TabBarView(
-            children: modes.map((Mode mode) {
-              return Center(
-                child: ModeView(mode: mode),
-              );
-            }).toList(),
+        	children: <Widget>[
+				new ActionPanel(),
+				new StatusViewer(),
+			]
           ),
         ),
       ),
@@ -43,21 +42,10 @@ class Mode {
   final String title;
   final IconData icon;
 }
-
 const List<Mode> modes = const <Mode>[
   const Mode(title: 'ACTION', icon: Icons.settings),
   const Mode(title: 'STATUS', icon: Icons.search),
 ];
-
-class ControllerState extends State<Controller> {
-  HomeClient grpcClient;
-
-  @override
-  Widget build(BuildContext context) {
-    grpcClient = new HomeClient();
-    return Text('Hello Controller');
-  }
-}
 
 class ModeView extends StatelessWidget {
   const ModeView({Key key, this.mode}) : super(key: key);
@@ -66,6 +54,39 @@ class ModeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(mode.title);
+  }
+}
+
+class ActionPanel extends StatefulWidget {
+	@override
+	ActionPanelState createState() => new ActionPanelState();
+}
+class ActionPanelState extends State<ActionPanel> {
+	@override
+	Widget build(BuildContext context) {
+		return Text('ACTION PANE');
+	}
+}
+
+class StatusViewer extends StatefulWidget {
+	@override
+	StatusViewerState createState() => new StatusViewerState();
+}
+class StatusViewerState extends State<StatusViewer> {
+	@override
+	Widget build(BuildContext context) {
+		return Text('STATUS VIEWER');
+	}
+}
+
+
+class ControllerState extends State<Controller> {
+  HomeClient grpcClient;
+
+  @override
+  Widget build(BuildContext context) {
+    grpcClient = new HomeClient();
+    return Text('Hello Controller');
   }
 }
 
@@ -78,7 +99,7 @@ class HomeClient {
   ClientChannel channel;
   HomeManagerClient stub;
 
-  void main(List<String> args) {
+  HomeClient() {
     channel = new ClientChannel('192.168.0.10',
         port: 8080,
         options: const ChannelOptions(
