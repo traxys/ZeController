@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'dart:async';
 
 import 'generated/server.pb.dart';
 import 'generated/server.pbgrpc.dart';
 
 void main() => runApp(ZeController());
 
-class ZeController extends StatelessWidget {
+class ZeController extends StatefulWidget {
+  @override
+  ZeControllerState createState() => ZeControllerState();
+}
+
+class ZeControllerState extends State<ZeController> {
+  final changeNotifier = new StreamController.broadcast();
+  final client = new HomeClient();
+
+  @override
+  void dispose() {
+    changeNotifier.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,26 +29,32 @@ class ZeController extends StatelessWidget {
       home: DefaultTabController(
         length: modes.length,
         child: Scaffold(
-          appBar: AppBar(
-            title: Text('ZeController'),
-            bottom: TabBar(
-                tabs: modes.map((Mode mode) {
-              return Tab(
-                text: mode.title,
-                icon: Icon(mode.icon),
-              );
-            }).toList()),
-          ),
-          body: TabBarView(
-        	children: <Widget>[
-				new ActionPanel(),
-				new StatusViewer(),
-			]
-          ),
-        ),
+            appBar: AppBar(
+              title: Text('ZeController'),
+              bottom: TabBar(
+                  tabs: modes.map((Mode mode) {
+                return Tab(
+                  text: mode.title,
+                  icon: Icon(mode.icon),
+                );
+              }).toList()),
+            ),
+            body: TabBarView(children: <Widget>[
+              new ActionPanel(shouldChange: changeNotifier.stream),
+              new StatusViewer(),
+            ]),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.refresh),
+              onPressed: () => changeNotifier.sink.add(Refresh(text: "AAA")),
+            )),
       ),
     );
   }
+}
+
+class Refresh {
+  const Refresh({this.text});
+  final String text;
 }
 
 class Mode {
@@ -42,6 +63,7 @@ class Mode {
   final String title;
   final IconData icon;
 }
+
 const List<Mode> modes = const <Mode>[
   const Mode(title: 'ACTION', icon: Icons.settings),
   const Mode(title: 'STATUS', icon: Icons.search),
@@ -58,41 +80,54 @@ class ModeView extends StatelessWidget {
 }
 
 class ActionPanel extends StatefulWidget {
-	@override
-	ActionPanelState createState() => new ActionPanelState();
+  final Stream shouldChange;
+
+  ActionPanel({@required this.shouldChange});
+
+  @override
+  ActionPanelState createState() => new ActionPanelState();
 }
+
 class ActionPanelState extends State<ActionPanel> {
-	@override
-	Widget build(BuildContext context) {
-		return Text('ACTION PANE');
-	}
-}
+  int count = 0;
+  StreamSubscription streamSubscription;
 
-class StatusViewer extends StatefulWidget {
-	@override
-	StatusViewerState createState() => new StatusViewerState();
-}
-class StatusViewerState extends State<StatusViewer> {
-	@override
-	Widget build(BuildContext context) {
-		return Text('STATUS VIEWER');
-	}
-}
+  @override
+  initState() {
+    super.initState();
+    streamSubscription = widget.shouldChange.listen((data) {
+      incr();
+    });
+  }
 
+  @override
+  dispose() {
+    super.dispose();
+    streamSubscription.cancel();
+  }
 
-class ControllerState extends State<Controller> {
-  HomeClient grpcClient;
+  void incr() {
+    setState(() {
+      count = count + 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    grpcClient = new HomeClient();
-    return Text('Hello Controller');
+    return Text(this.count.toString());
   }
 }
 
-class Controller extends StatefulWidget {
+class StatusViewer extends StatefulWidget {
   @override
-  ControllerState createState() => new ControllerState();
+  StatusViewerState createState() => new StatusViewerState();
+}
+
+class StatusViewerState extends State<StatusViewer> {
+  @override
+  Widget build(BuildContext context) {
+    return Text('STATUS VIEWER');
+  }
 }
 
 class HomeClient {
