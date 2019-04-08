@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+enum Status {
+	UNKNOWN = 0;
+	ON = 1;
+	OFF = 2;
+}
+
+enum ObjectType {
+	COMPUTER = 0;
+	LIGHT = 1;
+}
+
+message Object {
+	ObjectType type = 1;
+	uint32 id = 2;
+}
+
+message StatusRequest {
+	Object target = 1;
+}
+message StatusReply {
+	Status status = 1;
+}
+
+message ToggleReply {
+	Status new_status = 1;
+}
+
+service HomeManager {
+	rpc GetStatus(StatusRequest) returns (StatusReply);
+	rpc Toggle(Object) returns (ToggleReply);
+}
