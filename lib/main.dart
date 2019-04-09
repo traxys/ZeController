@@ -17,12 +17,18 @@ class ZeController extends StatefulWidget {
 class ZeControllerState extends State<ZeController> {
   final changeNotifier = new StreamController.broadcast();
   final client = new HomeClient();
-  String menuSelected;
+  ViewChoice _selectedChoice = viewChoices[0];
 
   @override
   void dispose() {
     changeNotifier.close();
     super.dispose();
+  }
+
+  void _select(ViewChoice choice) {
+    setState(() {
+      _selectedChoice = choice;
+    });
   }
 
   @override
@@ -34,40 +40,86 @@ class ZeControllerState extends State<ZeController> {
         child: Scaffold(
             appBar: AppBar(
               title: Text('ZeController'),
-			  actions: <Widget>[
-				DropdownButton<String> (
-					value: menuSelected,
-					onChanged: (String newSelection) {
-						setState(() {
-							menuSelected = newSelection;
-						});
-					},
-					items: <String>['Settings', 'About'].map<DropdownMenuItem<String>>((String value) {
-						return DropdownMenuItem<String>(
-							value: value,
-							child: Text(value),
-						);
-					}).toList(),
-				),
-			  ],
-              bottom: TabBar(
-                  tabs: modes.map((Mode mode) {
-                return Tab(
-                  text: mode.title,
-                  icon: Icon(mode.icon),
-                );
-              }).toList()),
+              actions: <Widget>[
+                PopupMenuButton<ViewChoice>(
+                    initialValue: viewChoices[0],
+                    onSelected: _select,
+                    itemBuilder: (BuildContext contex) {
+                      return viewChoices.map((ViewChoice choice) {
+                        return PopupMenuItem<ViewChoice>(
+                          value: choice,
+                          child: Text(choice.title),
+                        );
+                      }).toList();
+                    }),
+              ],
+              bottom: appBarBottom(),
             ),
-            body: TabBarView(children: <Widget>[
-              new ActionPanel(shouldChange: changeNotifier.stream),
-              new StatusViewer(),
-            ]),
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.refresh),
-              onPressed: () => changeNotifier.sink.add(Refresh(text: "AAA")),
-            )),
+            body: bodyWidget(),
+            floatingActionButton: floatingButton()),
       ),
     );
+  }
+
+  bodyWidget() {
+    return Container(
+      child:
+          SelectedView(choice: _selectedChoice, stream: changeNotifier.stream),
+    );
+  }
+
+  appBarBottom() {
+    if (_selectedChoice == viewChoices[0]) {
+      return TabBar(
+          tabs: modes.map((Mode mode) {
+        return Tab(
+          text: mode.title,
+          icon: Icon(mode.icon),
+        );
+      }).toList());
+    } else {
+      return null;
+    }
+  }
+
+  floatingButton() {
+    if (_selectedChoice == viewChoices[0]) {
+      return FloatingActionButton(
+        child: Icon(Icons.refresh),
+        onPressed: () => changeNotifier.sink.add(Refresh(text: "AAA")),
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+class ViewChoice {
+  ViewChoice({this.title});
+
+  String title;
+}
+
+List<ViewChoice> viewChoices = <ViewChoice>[
+  ViewChoice(title: 'Controller'),
+  ViewChoice(title: 'Settings'),
+];
+
+class SelectedView extends StatelessWidget {
+  final ViewChoice choice;
+  final Stream stream;
+
+  SelectedView({Key key, this.choice, this.stream}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    if (choice == viewChoices[0]) {
+      return TabBarView(children: <Widget>[
+        new ActionPanel(shouldChange: stream),
+        new StatusViewer(),
+      ]);
+    } else {
+      return Center(child: Text('Settings'));
+    }
   }
 }
 
