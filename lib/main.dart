@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'dart:async';
 
+import 'actionpanel.dart';
+
 import 'generated/server.pb.dart';
 import 'generated/server.pbgrpc.dart';
 
@@ -15,6 +17,7 @@ class ZeController extends StatefulWidget {
 class ZeControllerState extends State<ZeController> {
   final changeNotifier = new StreamController.broadcast();
   final client = new HomeClient();
+  String menuSelected;
 
   @override
   void dispose() {
@@ -31,6 +34,22 @@ class ZeControllerState extends State<ZeController> {
         child: Scaffold(
             appBar: AppBar(
               title: Text('ZeController'),
+			  actions: <Widget>[
+				DropdownButton<String> (
+					value: menuSelected,
+					onChanged: (String newSelection) {
+						setState(() {
+							menuSelected = newSelection;
+						});
+					},
+					items: <String>['Settings', 'About'].map<DropdownMenuItem<String>>((String value) {
+						return DropdownMenuItem<String>(
+							value: value,
+							child: Text(value),
+						);
+					}).toList(),
+				),
+			  ],
               bottom: TabBar(
                   tabs: modes.map((Mode mode) {
                 return Tab(
@@ -76,45 +95,6 @@ class ModeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(mode.title);
-  }
-}
-
-class ActionPanel extends StatefulWidget {
-  final Stream shouldChange;
-
-  ActionPanel({@required this.shouldChange});
-
-  @override
-  ActionPanelState createState() => new ActionPanelState();
-}
-
-class ActionPanelState extends State<ActionPanel> {
-  int count = 0;
-  StreamSubscription streamSubscription;
-
-  @override
-  initState() {
-    super.initState();
-    streamSubscription = widget.shouldChange.listen((data) {
-      incr();
-    });
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    streamSubscription.cancel();
-  }
-
-  void incr() {
-    setState(() {
-      count = count + 1;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(this.count.toString());
   }
 }
 
