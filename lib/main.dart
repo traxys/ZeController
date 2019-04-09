@@ -42,7 +42,6 @@ class ZeControllerState extends State<ZeController> {
               title: Text('ZeController'),
               actions: <Widget>[
                 PopupMenuButton<ViewChoice>(
-                    initialValue: viewChoices[0],
                     onSelected: _select,
                     itemBuilder: (BuildContext contex) {
                       return viewChoices.map((ViewChoice choice) {
@@ -86,7 +85,10 @@ class ZeControllerState extends State<ZeController> {
     if (_selectedChoice == viewChoices[0]) {
       return FloatingActionButton(
         child: Icon(Icons.refresh),
-        onPressed: () => changeNotifier.sink.add(Refresh(text: "AAA")),
+        onPressed: () {
+          changeNotifier.sink.add(Refresh(text: "AAA"));
+          client.test();
+        },
       );
     } else {
       return null;
@@ -174,5 +176,10 @@ class HomeClient {
 
     stub = new HomeManagerClient(channel,
         options: new CallOptions(timeout: new Duration(seconds: 30)));
+  }
+
+  test() async {
+    final testRequest = new StatusRequest();
+    final response = await stub.getStatus(testRequest);
   }
 }

@@ -21,8 +21,8 @@ const ObjectType$json = const {
   ],
 };
 
-const Object$json = const {
-  '1': 'Object',
+const ObjectSelector$json = const {
+  '1': 'ObjectSelector',
   '2': const [
     const {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.ObjectType', '10': 'type'},
     const {'1': 'id', '3': 2, '4': 1, '5': 13, '10': 'id'},
@@ -32,7 +32,7 @@ const Object$json = const {
 const StatusRequest$json = const {
   '1': 'StatusRequest',
   '2': const [
-    const {'1': 'target', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'target'},
+    const {'1': 'target', '3': 1, '4': 1, '5': 11, '6': '.ObjectSelector', '10': 'target'},
   ],
 };
 

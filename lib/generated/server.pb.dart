@@ -12,24 +12,24 @@ import 'server.pbenum.dart';
 
 export 'server.pbenum.dart';
 
-class Object extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Object')
+class ObjectSelector extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ObjectSelector')
     ..e<ObjectType>(1, 'type', $pb.PbFieldType.OE, ObjectType.COMPUTER, ObjectType.valueOf, ObjectType.values)
     ..a<$core.int>(2, 'id', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
-  Object() : super();
-  Object.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  Object.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
-  Object clone() => Object()..mergeFromMessage(this);
-  Object copyWith(void Function(Object) updates) => super.copyWith((message) => updates(message as Object));
+  ObjectSelector() : super();
+  ObjectSelector.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ObjectSelector.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ObjectSelector clone() => ObjectSelector()..mergeFromMessage(this);
+  ObjectSelector copyWith(void Function(ObjectSelector) updates) => super.copyWith((message) => updates(message as ObjectSelector));
   $pb.BuilderInfo get info_ => _i;
-  static Object create() => Object();
-  Object createEmptyInstance() => create();
-  static $pb.PbList<Object> createRepeated() => $pb.PbList<Object>();
-  static Object getDefault() => _defaultInstance ??= create()..freeze();
-  static Object _defaultInstance;
+  static ObjectSelector create() => ObjectSelector();
+  ObjectSelector createEmptyInstance() => create();
+  static $pb.PbList<ObjectSelector> createRepeated() => $pb.PbList<ObjectSelector>();
+  static ObjectSelector getDefault() => _defaultInstance ??= create()..freeze();
+  static ObjectSelector _defaultInstance;
 
   ObjectType get type => $_getN(0);
   set type(ObjectType v) { setField(1, v); }
@@ -44,7 +44,7 @@ class Object extends $pb.GeneratedMessage {
 
 class StatusRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('StatusRequest')
-    ..a<Object>(1, 'target', $pb.PbFieldType.OM, Object.getDefault, Object.create)
+    ..a<ObjectSelector>(1, 'target', $pb.PbFieldType.OM, ObjectSelector.getDefault, ObjectSelector.create)
     ..hasRequiredFields = false
   ;
 
@@ -60,8 +60,8 @@ class StatusRequest extends $pb.GeneratedMessage {
   static StatusRequest getDefault() => _defaultInstance ??= create()..freeze();
   static StatusRequest _defaultInstance;
 
-  Object get target => $_getN(0);
-  set target(Object v) { setField(1, v); }
+  ObjectSelector get target => $_getN(0);
+  set target(ObjectSelector v) { setField(1, v); }
   $core.bool hasTarget() => $_has(0);
   void clearTarget() => clearField(1);
 }
