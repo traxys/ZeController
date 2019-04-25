@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 import 'actionpanel.dart';
+import 'settings.dart';
 
 import 'generated/server.pb.dart';
 import 'generated/server.pbgrpc.dart';
@@ -120,7 +122,7 @@ class SelectedView extends StatelessWidget {
         new StatusViewer(),
       ]);
     } else {
-      return Center(child: Text('Settings'));
+      return Center(child: new Settings());
     }
   }
 }
@@ -169,8 +171,8 @@ class HomeClient {
   HomeManagerClient stub;
 
   HomeClient() {
-    channel = new ClientChannel('192.168.0.10',
-        port: 8080,
+    channel = new ClientChannel('192.168.1.33',
+        port: 4200,
         options: const ChannelOptions(
             credentials: const ChannelCredentials.insecure()));
 
