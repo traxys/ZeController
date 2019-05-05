@@ -11,23 +11,34 @@ enum ObjectType {
 	LIGHT = 1;
 }
 
-message ObjectSelector {
+message Object {
 	ObjectType type = 1;
 	uint32 id = 2;
 }
 
 message StatusRequest {
-	ObjectSelector target = 1;
+	Object target = 1;
 }
 message StatusReply {
 	Status status = 1;
 }
 
+message ToggleRequest {
+  Object object = 1;
+}
 message ToggleReply {
 	Status new_status = 1;
 }
 
+message PowerOnRequest {
+  Object object = 1;
+}
+message PowerOnReply {
+    Status previous_status = 1;
+}
+
 service HomeManager {
 	rpc GetStatus(StatusRequest) returns (StatusReply);
-	rpc Toggle(ObjectSelector) returns (ToggleReply);
+	rpc Toggle(ToggleRequest) returns (ToggleReply);
+    rpc PowerOn(PowerOnRequest) returns (PowerOnReply);
 }
