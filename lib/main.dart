@@ -41,12 +41,15 @@ class ZeControllerState extends State<ZeController> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ZeController - Home Controller',
+      title: 'ZeController',
+      theme: new ThemeData(
+        brightness: Brightness.dark, // new
+      ),
       home: DefaultTabController(
         length: modes.length,
         child: Scaffold(
             appBar: AppBar(
-              title: Text('ZeController'),
+              title: Text('ZeController - Home Controller'),
               actions: <Widget>[
                 PopupMenuButton<ViewChoice>(
                     onSelected: _select,
@@ -94,7 +97,6 @@ class ZeControllerState extends State<ZeController> {
         child: Icon(Icons.refresh),
         onPressed: () {
 		  statusNotifier.sink.add(Refresh(text: "AAA"));
-          client.test();
         },
       );
     } else {
@@ -178,7 +180,7 @@ class HomeClient {
   StreamSink statusPublisher;
 
   HomeClient({@required Stream requestStream,@required this.statusPublisher}) {
-    channel = new ClientChannel('192.168.1.33',
+    channel = new ClientChannel('192.168.0.10',
         port: 4200,
         options: const ChannelOptions(
             credentials: const ChannelCredentials.insecure()));
