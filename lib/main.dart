@@ -8,6 +8,7 @@ import 'settings.dart';
 
 import 'generated/server.pb.dart';
 import 'generated/server.pbgrpc.dart';
+import 'package:protobuf/protobuf.dart' as $pb;
 
 void main() => runApp(ZeController());
 
@@ -20,15 +21,18 @@ class ZeControllerState extends State<ZeController> {
   final statusNotifier = new StreamController.broadcast();
   HomeClient client;
   ViewChoice _selectedChoice = viewChoices[0];
-  final rpcRequestController = new StreamController();
+  final rpcRequestController = new StreamController<RPCRequest>();
 
   ZeControllerState() {
-	client = new HomeClient(requestStream: rpcRequestController.stream, statusPublisher: statusNotifier.sink);
+    client = new HomeClient(
+        requestStream: rpcRequestController.stream,
+        statusPublisher: statusNotifier.sink);
   }
 
   @override
   void dispose() {
     statusNotifier.close();
+    rpcRequestController.close();
     super.dispose();
   }
 
@@ -72,8 +76,10 @@ class ZeControllerState extends State<ZeController> {
 
   bodyWidget() {
     return Container(
-      child:
-          SelectedView(choice: _selectedChoice, stream: statusNotifier.stream),
+      child: SelectedView(
+          choice: _selectedChoice,
+          stream: statusNotifier.stream,
+          requestSink: rpcRequestController.sink),
     );
   }
 
@@ -96,7 +102,7 @@ class ZeControllerState extends State<ZeController> {
       return FloatingActionButton(
         child: Icon(Icons.refresh),
         onPressed: () {
-		  statusNotifier.sink.add(Refresh(text: "AAA"));
+          statusNotifier.sink.add(Refresh(text: "AAA"));
         },
       );
     } else {
@@ -119,13 +125,16 @@ List<ViewChoice> viewChoices = <ViewChoice>[
 class SelectedView extends StatelessWidget {
   final ViewChoice choice;
   final Stream stream;
+  final Sink requestSink;
 
-  SelectedView({Key key, this.choice, this.stream}) : super(key: key);
+  SelectedView(
+      {Key key, this.choice, @required this.stream, @required this.requestSink})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     if (choice == viewChoices[0]) {
       return TabBarView(children: <Widget>[
-        new ActionPanel(statusStream: stream),
+        new ActionPanel(statusStream: stream, requestSink: requestSink),
         new StatusViewer(),
       ]);
     } else {
@@ -173,30 +182,38 @@ class StatusViewerState extends State<StatusViewer> {
   }
 }
 
+enum RequestType {
+  PowerOn,
+}
+
+class RPCRequest {
+  final $pb.GeneratedMessage request;
+  final RequestType type;
+
+  RPCRequest({@required this.request, @required this.type});
+}
+
 class HomeClient {
   ClientChannel channel;
   HomeManagerClient stub;
-  StreamSubscription requests;
   StreamSink statusPublisher;
 
-  HomeClient({@required Stream requestStream,@required this.statusPublisher}) {
-    channel = new ClientChannel('192.168.0.10',
+  HomeClient({@required Stream requestStream, @required this.statusPublisher}) {
+    channel = new ClientChannel('192.168.0.17',
         port: 4200,
         options: const ChannelOptions(
             credentials: const ChannelCredentials.insecure()));
 
     stub = new HomeManagerClient(channel,
         options: new CallOptions(timeout: new Duration(seconds: 30)));
-	
-	requests = requestStream.listen((data) => handleRequest());
+
+    requestStream.forEach((request) => handleRequest(request));
   }
 
-  handleRequest() async {
-
-  }
-
-  test() async {
-    final testRequest = new StatusRequest();
-    final response = await stub.getStatus(testRequest);
+  handleRequest(RPCRequest request) async {
+    if (request.type == RequestType.PowerOn) {
+      final status = await stub.powerOn(request.request);
+      statusPublisher.add(status);
+    }
   }
 }

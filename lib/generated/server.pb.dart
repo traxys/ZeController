@@ -12,24 +12,24 @@ import 'server.pbenum.dart';
 
 export 'server.pbenum.dart';
 
-class ObjectSelector extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ObjectSelector')
+class Object extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Object')
     ..e<ObjectType>(1, 'type', $pb.PbFieldType.OE, ObjectType.COMPUTER, ObjectType.valueOf, ObjectType.values)
     ..a<$core.int>(2, 'id', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
-  ObjectSelector() : super();
-  ObjectSelector.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
-  ObjectSelector.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
-  ObjectSelector clone() => ObjectSelector()..mergeFromMessage(this);
-  ObjectSelector copyWith(void Function(ObjectSelector) updates) => super.copyWith((message) => updates(message as ObjectSelector));
+  Object() : super();
+  Object.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  Object.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  Object clone() => Object()..mergeFromMessage(this);
+  Object copyWith(void Function(Object) updates) => super.copyWith((message) => updates(message as Object));
   $pb.BuilderInfo get info_ => _i;
-  static ObjectSelector create() => ObjectSelector();
-  ObjectSelector createEmptyInstance() => create();
-  static $pb.PbList<ObjectSelector> createRepeated() => $pb.PbList<ObjectSelector>();
-  static ObjectSelector getDefault() => _defaultInstance ??= create()..freeze();
-  static ObjectSelector _defaultInstance;
+  static Object create() => Object();
+  Object createEmptyInstance() => create();
+  static $pb.PbList<Object> createRepeated() => $pb.PbList<Object>();
+  static Object getDefault() => _defaultInstance ??= create()..freeze();
+  static Object _defaultInstance;
 
   ObjectType get type => $_getN(0);
   set type(ObjectType v) { setField(1, v); }
@@ -44,7 +44,7 @@ class ObjectSelector extends $pb.GeneratedMessage {
 
 class StatusRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('StatusRequest')
-    ..a<ObjectSelector>(1, 'target', $pb.PbFieldType.OM, ObjectSelector.getDefault, ObjectSelector.create)
+    ..a<Object>(1, 'target', $pb.PbFieldType.OM, Object.getDefault, Object.create)
     ..hasRequiredFields = false
   ;
 
@@ -60,8 +60,8 @@ class StatusRequest extends $pb.GeneratedMessage {
   static StatusRequest getDefault() => _defaultInstance ??= create()..freeze();
   static StatusRequest _defaultInstance;
 
-  ObjectSelector get target => $_getN(0);
-  set target(ObjectSelector v) { setField(1, v); }
+  Object get target => $_getN(0);
+  set target(Object v) { setField(1, v); }
   $core.bool hasTarget() => $_has(0);
   void clearTarget() => clearField(1);
 }
@@ -90,6 +90,30 @@ class StatusReply extends $pb.GeneratedMessage {
   void clearStatus() => clearField(1);
 }
 
+class ToggleRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('ToggleRequest')
+    ..a<Object>(1, 'object', $pb.PbFieldType.OM, Object.getDefault, Object.create)
+    ..hasRequiredFields = false
+  ;
+
+  ToggleRequest() : super();
+  ToggleRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  ToggleRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  ToggleRequest clone() => ToggleRequest()..mergeFromMessage(this);
+  ToggleRequest copyWith(void Function(ToggleRequest) updates) => super.copyWith((message) => updates(message as ToggleRequest));
+  $pb.BuilderInfo get info_ => _i;
+  static ToggleRequest create() => ToggleRequest();
+  ToggleRequest createEmptyInstance() => create();
+  static $pb.PbList<ToggleRequest> createRepeated() => $pb.PbList<ToggleRequest>();
+  static ToggleRequest getDefault() => _defaultInstance ??= create()..freeze();
+  static ToggleRequest _defaultInstance;
+
+  Object get object => $_getN(0);
+  set object(Object v) { setField(1, v); }
+  $core.bool hasObject() => $_has(0);
+  void clearObject() => clearField(1);
+}
+
 class ToggleReply extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('ToggleReply')
     ..e<Status>(1, 'newStatus', $pb.PbFieldType.OE, Status.UNKNOWN, Status.valueOf, Status.values)
@@ -112,5 +136,53 @@ class ToggleReply extends $pb.GeneratedMessage {
   set newStatus(Status v) { setField(1, v); }
   $core.bool hasNewStatus() => $_has(0);
   void clearNewStatus() => clearField(1);
+}
+
+class PowerOnRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PowerOnRequest')
+    ..a<Object>(1, 'object', $pb.PbFieldType.OM, Object.getDefault, Object.create)
+    ..hasRequiredFields = false
+  ;
+
+  PowerOnRequest() : super();
+  PowerOnRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  PowerOnRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  PowerOnRequest clone() => PowerOnRequest()..mergeFromMessage(this);
+  PowerOnRequest copyWith(void Function(PowerOnRequest) updates) => super.copyWith((message) => updates(message as PowerOnRequest));
+  $pb.BuilderInfo get info_ => _i;
+  static PowerOnRequest create() => PowerOnRequest();
+  PowerOnRequest createEmptyInstance() => create();
+  static $pb.PbList<PowerOnRequest> createRepeated() => $pb.PbList<PowerOnRequest>();
+  static PowerOnRequest getDefault() => _defaultInstance ??= create()..freeze();
+  static PowerOnRequest _defaultInstance;
+
+  Object get object => $_getN(0);
+  set object(Object v) { setField(1, v); }
+  $core.bool hasObject() => $_has(0);
+  void clearObject() => clearField(1);
+}
+
+class PowerOnReply extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PowerOnReply')
+    ..e<Status>(1, 'previousStatus', $pb.PbFieldType.OE, Status.UNKNOWN, Status.valueOf, Status.values)
+    ..hasRequiredFields = false
+  ;
+
+  PowerOnReply() : super();
+  PowerOnReply.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromBuffer(i, r);
+  PowerOnReply.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) : super.fromJson(i, r);
+  PowerOnReply clone() => PowerOnReply()..mergeFromMessage(this);
+  PowerOnReply copyWith(void Function(PowerOnReply) updates) => super.copyWith((message) => updates(message as PowerOnReply));
+  $pb.BuilderInfo get info_ => _i;
+  static PowerOnReply create() => PowerOnReply();
+  PowerOnReply createEmptyInstance() => create();
+  static $pb.PbList<PowerOnReply> createRepeated() => $pb.PbList<PowerOnReply>();
+  static PowerOnReply getDefault() => _defaultInstance ??= create()..freeze();
+  static PowerOnReply _defaultInstance;
+
+  Status get previousStatus => $_getN(0);
+  set previousStatus(Status v) { setField(1, v); }
+  $core.bool hasPreviousStatus() => $_has(0);
+  void clearPreviousStatus() => clearField(1);
 }
 

@@ -21,8 +21,8 @@ const ObjectType$json = const {
   ],
 };
 
-const ObjectSelector$json = const {
-  '1': 'ObjectSelector',
+const Object$json = const {
+  '1': 'Object',
   '2': const [
     const {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.ObjectType', '10': 'type'},
     const {'1': 'id', '3': 2, '4': 1, '5': 13, '10': 'id'},
@@ -32,7 +32,7 @@ const ObjectSelector$json = const {
 const StatusRequest$json = const {
   '1': 'StatusRequest',
   '2': const [
-    const {'1': 'target', '3': 1, '4': 1, '5': 11, '6': '.ObjectSelector', '10': 'target'},
+    const {'1': 'target', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'target'},
   ],
 };
 
@@ -43,10 +43,31 @@ const StatusReply$json = const {
   ],
 };
 
+const ToggleRequest$json = const {
+  '1': 'ToggleRequest',
+  '2': const [
+    const {'1': 'object', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'object'},
+  ],
+};
+
 const ToggleReply$json = const {
   '1': 'ToggleReply',
   '2': const [
     const {'1': 'new_status', '3': 1, '4': 1, '5': 14, '6': '.Status', '10': 'newStatus'},
+  ],
+};
+
+const PowerOnRequest$json = const {
+  '1': 'PowerOnRequest',
+  '2': const [
+    const {'1': 'object', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'object'},
+  ],
+};
+
+const PowerOnReply$json = const {
+  '1': 'PowerOnReply',
+  '2': const [
+    const {'1': 'previous_status', '3': 1, '4': 1, '5': 14, '6': '.Status', '10': 'previousStatus'},
   ],
 };
 

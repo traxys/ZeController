@@ -18,10 +18,14 @@ class HomeManagerClient extends $grpc.Client {
       '/HomeManager/GetStatus',
       (StatusRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => StatusReply.fromBuffer(value));
-  static final _$toggle = $grpc.ClientMethod<ObjectSelector, ToggleReply>(
+  static final _$toggle = $grpc.ClientMethod<ToggleRequest, ToggleReply>(
       '/HomeManager/Toggle',
-      (ObjectSelector value) => value.writeToBuffer(),
+      (ToggleRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => ToggleReply.fromBuffer(value));
+  static final _$powerOn = $grpc.ClientMethod<PowerOnRequest, PowerOnReply>(
+      '/HomeManager/PowerOn',
+      (PowerOnRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => PowerOnReply.fromBuffer(value));
 
   HomeManagerClient($grpc.ClientChannel channel, {$grpc.CallOptions options})
       : super(channel, options: options);
@@ -33,9 +37,16 @@ class HomeManagerClient extends $grpc.Client {
     return $grpc.ResponseFuture(call);
   }
 
-  $grpc.ResponseFuture<ToggleReply> toggle(ObjectSelector request,
+  $grpc.ResponseFuture<ToggleReply> toggle(ToggleRequest request,
       {$grpc.CallOptions options}) {
     final call = $createCall(_$toggle, $async.Stream.fromIterable([request]),
+        options: options);
+    return $grpc.ResponseFuture(call);
+  }
+
+  $grpc.ResponseFuture<PowerOnReply> powerOn(PowerOnRequest request,
+      {$grpc.CallOptions options}) {
+    final call = $createCall(_$powerOn, $async.Stream.fromIterable([request]),
         options: options);
     return $grpc.ResponseFuture(call);
   }
@@ -52,13 +63,20 @@ abstract class HomeManagerServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => StatusRequest.fromBuffer(value),
         (StatusReply value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<ObjectSelector, ToggleReply>(
+    $addMethod($grpc.ServiceMethod<ToggleRequest, ToggleReply>(
         'Toggle',
         toggle_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => ObjectSelector.fromBuffer(value),
+        ($core.List<$core.int> value) => ToggleRequest.fromBuffer(value),
         (ToggleReply value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<PowerOnRequest, PowerOnReply>(
+        'PowerOn',
+        powerOn_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => PowerOnRequest.fromBuffer(value),
+        (PowerOnReply value) => value.writeToBuffer()));
   }
 
   $async.Future<StatusReply> getStatus_Pre(
@@ -71,8 +89,15 @@ abstract class HomeManagerServiceBase extends $grpc.Service {
     return toggle(call, await request);
   }
 
+  $async.Future<PowerOnReply> powerOn_Pre(
+      $grpc.ServiceCall call, $async.Future request) async {
+    return powerOn(call, await request);
+  }
+
   $async.Future<StatusReply> getStatus(
       $grpc.ServiceCall call, StatusRequest request);
   $async.Future<ToggleReply> toggle(
-      $grpc.ServiceCall call, ObjectSelector request);
+      $grpc.ServiceCall call, ToggleRequest request);
+  $async.Future<PowerOnReply> powerOn(
+      $grpc.ServiceCall call, PowerOnRequest request);
 }
