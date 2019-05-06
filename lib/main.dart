@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 import 'actionpanel.dart';
+import 'settings.dart';
 
 import 'generated/server.pb.dart';
 import 'generated/server.pbgrpc.dart';
@@ -123,7 +125,7 @@ class SelectedView extends StatelessWidget {
         new StatusViewer(),
       ]);
     } else {
-      return Center(child: Text('Settings'));
+      return Center(child: new Settings());
     }
   }
 }
