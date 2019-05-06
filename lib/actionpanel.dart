@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class ActionPanel extends StatefulWidget {
-  final Stream shouldChange;
+  final Stream statusStream;
 
-  ActionPanel({@required this.shouldChange});
+  ActionPanel({@required this.statusStream});
 
   @override
   ActionPanelState createState() => new ActionPanelState();
@@ -12,12 +12,12 @@ class ActionPanel extends StatefulWidget {
 
 class ActionPanelState extends State<ActionPanel> {
   int count = 0;
-  StreamSubscription streamSubscription;
+  StreamSubscription statusStream;
 
   @override
   initState() {
     super.initState();
-    streamSubscription = widget.shouldChange.listen((data) {
+    statusStream = widget.statusStream.listen((data) {
       incr();
     });
   }
@@ -25,7 +25,7 @@ class ActionPanelState extends State<ActionPanel> {
   @override
   dispose() {
     super.dispose();
-    streamSubscription.cancel();
+    statusStream.cancel();
   }
 
   void incr() {
@@ -36,6 +36,19 @@ class ActionPanelState extends State<ActionPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(this.count.toString());
+    return Row(
+		mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+		children: <Widget>[
+            RaisedButton(
+              onPressed: startComputer,
+              child: Text('Start Computer'),
+            ),
+		]				
+	);
+  }
+
+  startComputer() async {
+	
   }
 }

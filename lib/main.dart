@@ -17,13 +17,18 @@ class ZeController extends StatefulWidget {
 }
 
 class ZeControllerState extends State<ZeController> {
-  final changeNotifier = new StreamController.broadcast();
-  final client = new HomeClient();
+  final statusNotifier = new StreamController.broadcast();
+  HomeClient client;
   ViewChoice _selectedChoice = viewChoices[0];
+  final rpcRequestController = new StreamController();
+
+  ZeControllerState() {
+	client = new HomeClient(requestStream: rpcRequestController.stream, statusPublisher: statusNotifier.sink);
+  }
 
   @override
   void dispose() {
-    changeNotifier.close();
+    statusNotifier.close();
     super.dispose();
   }
 
@@ -65,7 +70,7 @@ class ZeControllerState extends State<ZeController> {
   bodyWidget() {
     return Container(
       child:
-          SelectedView(choice: _selectedChoice, stream: changeNotifier.stream),
+          SelectedView(choice: _selectedChoice, stream: statusNotifier.stream),
     );
   }
 
@@ -88,7 +93,7 @@ class ZeControllerState extends State<ZeController> {
       return FloatingActionButton(
         child: Icon(Icons.refresh),
         onPressed: () {
-          changeNotifier.sink.add(Refresh(text: "AAA"));
+		  statusNotifier.sink.add(Refresh(text: "AAA"));
           client.test();
         },
       );
@@ -118,7 +123,7 @@ class SelectedView extends StatelessWidget {
   Widget build(BuildContext context) {
     if (choice == viewChoices[0]) {
       return TabBarView(children: <Widget>[
-        new ActionPanel(shouldChange: stream),
+        new ActionPanel(statusStream: stream),
         new StatusViewer(),
       ]);
     } else {
@@ -169,8 +174,10 @@ class StatusViewerState extends State<StatusViewer> {
 class HomeClient {
   ClientChannel channel;
   HomeManagerClient stub;
+  StreamSubscription requests;
+  StreamSink statusPublisher;
 
-  HomeClient() {
+  HomeClient({@required Stream requestStream,@required this.statusPublisher}) {
     channel = new ClientChannel('192.168.1.33',
         port: 4200,
         options: const ChannelOptions(
@@ -178,6 +185,12 @@ class HomeClient {
 
     stub = new HomeManagerClient(channel,
         options: new CallOptions(timeout: new Duration(seconds: 30)));
+	
+	requests = requestStream.listen((data) => handleRequest());
+  }
+
+  handleRequest() async {
+
   }
 
   test() async {
