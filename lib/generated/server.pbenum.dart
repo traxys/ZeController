@@ -13,13 +13,14 @@ class Status extends $pb.ProtobufEnum {
   static const Status ON = Status._(1, 'ON');
   static const Status OFF = Status._(2, 'OFF');
 
-  static const $core.List<Status> values = <Status> [
+  static const $core.List<Status> values = <Status>[
     UNKNOWN,
     ON,
     OFF,
   ];
 
-  static final $core.Map<$core.int, Status> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static final $core.Map<$core.int, Status> _byValue =
+      $pb.ProtobufEnum.initByValue(values);
   static Status valueOf($core.int value) => _byValue[value];
 
   const Status._($core.int v, $core.String n) : super(v, n);
@@ -29,14 +30,14 @@ class ObjectType extends $pb.ProtobufEnum {
   static const ObjectType COMPUTER = ObjectType._(0, 'COMPUTER');
   static const ObjectType LIGHT = ObjectType._(1, 'LIGHT');
 
-  static const $core.List<ObjectType> values = <ObjectType> [
+  static const $core.List<ObjectType> values = <ObjectType>[
     COMPUTER,
     LIGHT,
   ];
 
-  static final $core.Map<$core.int, ObjectType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static final $core.Map<$core.int, ObjectType> _byValue =
+      $pb.ProtobufEnum.initByValue(values);
   static ObjectType valueOf($core.int value) => _byValue[value];
 
   const ObjectType._($core.int v, $core.String n) : super(v, n);
 }
-

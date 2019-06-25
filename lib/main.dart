@@ -4,9 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 import 'actionpanel.dart';
+import 'statuspanel.dart';
 import 'settings.dart';
 
-import 'generated/server.pb.dart';
+import 'generated/server.pb.dart' as rpc_types;
 import 'generated/server.pbgrpc.dart';
 import 'package:protobuf/protobuf.dart' as $pb;
 
@@ -101,8 +102,13 @@ class ZeControllerState extends State<ZeController> {
     if (_selectedChoice == viewChoices[0]) {
       return FloatingActionButton(
         child: Icon(Icons.refresh),
-        onPressed: () {
-          statusNotifier.sink.add(Refresh(text: "AAA"));
+        onPressed: () async {
+          trackedDevices.forEach((tracked) async {
+            var status = await client.stub
+                .getStatus(rpc_types.StatusRequest()..target = tracked);
+            statusNotifier.add(ObjectStatus(
+                type: tracked.type, id: tracked.id, status: status.status));
+          });
         },
       );
     } else {
@@ -116,6 +122,12 @@ class ViewChoice {
 
   String title;
 }
+
+List<rpc_types.Object> trackedDevices = <rpc_types.Object>[
+  rpc_types.Object()
+    ..type = rpc_types.ObjectType.COMPUTER
+    ..id = 1,
+];
 
 List<ViewChoice> viewChoices = <ViewChoice>[
   ViewChoice(title: 'Controller'),
@@ -135,7 +147,7 @@ class SelectedView extends StatelessWidget {
     if (choice == viewChoices[0]) {
       return TabBarView(children: <Widget>[
         new ActionPanel(statusStream: stream, requestSink: requestSink),
-        new StatusViewer(),
+        new StatusPanel(statusStream: stream),
       ]);
     } else {
       return Center(child: new Settings());
@@ -143,9 +155,19 @@ class SelectedView extends StatelessWidget {
   }
 }
 
-class Refresh {
-  const Refresh({this.text});
-  final String text;
+class RefreshObject {
+  const RefreshObject({this.object});
+  final rpc_types.Object object;
+}
+
+class RefreshAll {}
+
+class ObjectStatus {
+  const ObjectStatus({this.type, this.id, this.status});
+
+  final rpc_types.ObjectType type;
+  final int id;
+  final rpc_types.Status status;
 }
 
 class Mode {
@@ -170,18 +192,6 @@ class ModeView extends StatelessWidget {
   }
 }
 
-class StatusViewer extends StatefulWidget {
-  @override
-  StatusViewerState createState() => new StatusViewerState();
-}
-
-class StatusViewerState extends State<StatusViewer> {
-  @override
-  Widget build(BuildContext context) {
-    return Text('STATUS VIEWER');
-  }
-}
-
 enum RequestType {
   PowerOn,
 }
@@ -199,7 +209,7 @@ class HomeClient {
   StreamSink statusPublisher;
 
   HomeClient({@required Stream requestStream, @required this.statusPublisher}) {
-    channel = new ClientChannel('192.168.0.17',
+    channel = new ClientChannel('192.168.0.10',
         port: 4200,
         options: const ChannelOptions(
             credentials: const ChannelCredentials.insecure()));
@@ -211,6 +221,7 @@ class HomeClient {
   }
 
   handleRequest(RPCRequest request) async {
+    print(request);
     if (request.type == RequestType.PowerOn) {
       final status = await stub.powerOn(request.request);
       statusPublisher.add(status);

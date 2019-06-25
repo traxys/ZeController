@@ -24,7 +24,14 @@ const ObjectType$json = const {
 const Object$json = const {
   '1': 'Object',
   '2': const [
-    const {'1': 'type', '3': 1, '4': 1, '5': 14, '6': '.ObjectType', '10': 'type'},
+    const {
+      '1': 'type',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.ObjectType',
+      '10': 'type'
+    },
     const {'1': 'id', '3': 2, '4': 1, '5': 13, '10': 'id'},
   ],
 };
@@ -32,42 +39,83 @@ const Object$json = const {
 const StatusRequest$json = const {
   '1': 'StatusRequest',
   '2': const [
-    const {'1': 'target', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'target'},
+    const {
+      '1': 'target',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.Object',
+      '10': 'target'
+    },
   ],
 };
 
 const StatusReply$json = const {
   '1': 'StatusReply',
   '2': const [
-    const {'1': 'status', '3': 1, '4': 1, '5': 14, '6': '.Status', '10': 'status'},
+    const {
+      '1': 'status',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.Status',
+      '10': 'status'
+    },
   ],
 };
 
 const ToggleRequest$json = const {
   '1': 'ToggleRequest',
   '2': const [
-    const {'1': 'object', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'object'},
+    const {
+      '1': 'object',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.Object',
+      '10': 'object'
+    },
   ],
 };
 
 const ToggleReply$json = const {
   '1': 'ToggleReply',
   '2': const [
-    const {'1': 'new_status', '3': 1, '4': 1, '5': 14, '6': '.Status', '10': 'newStatus'},
+    const {
+      '1': 'new_status',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.Status',
+      '10': 'newStatus'
+    },
   ],
 };
 
 const PowerOnRequest$json = const {
   '1': 'PowerOnRequest',
   '2': const [
-    const {'1': 'object', '3': 1, '4': 1, '5': 11, '6': '.Object', '10': 'object'},
+    const {
+      '1': 'object',
+      '3': 1,
+      '4': 1,
+      '5': 11,
+      '6': '.Object',
+      '10': 'object'
+    },
   ],
 };
 
 const PowerOnReply$json = const {
   '1': 'PowerOnReply',
   '2': const [
-    const {'1': 'previous_status', '3': 1, '4': 1, '5': 14, '6': '.Status', '10': 'previousStatus'},
+    const {
+      '1': 'previous_status',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.Status',
+      '10': 'previousStatus'
+    },
   ],
 };
-
